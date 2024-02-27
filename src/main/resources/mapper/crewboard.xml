@@ -1,6 +1,45 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mountain.Mountain.API.crewboard.repository.CrewBoardRepository">
 
-</beans>
+
+     <insert id="createCrewBoard">
+        INSERT INTO CrewBoard
+         (member_id, crewboard_mountain, crewboard_content)
+         VALUES
+         (#{crewboardModel.memberId},#{crewboardModel.crewboardMountain},#{crewboardModel.crewboardContent})
+     </insert>
+
+    <select id="findCrewBoard" resultType="mountain.Mountain.model.CrewboardModel">
+        SELECT
+        *
+        FROM CrewBoard
+        WHERE crewboard_no = #{crewboardNo}
+    </select>
+
+    <update id="updateCrewBoard">
+        UPDATE CrewBoard
+        SET crewboard_mountain = #{crewboardMountain}, crewboard_content = #{crewboardContent}
+        WHERE crewboard_no = #{crewboardNo}
+    </update>
+
+    <delete id="deleteCrewBoard" parameterType="int">
+        DELETE FROM CrewBoard WHERE crewboard_no = #{crewboardNo}
+    </delete>
+
+    <select id="findAllCrewBoard" resultType="mountain.Mountain.model.CrewboardModel">
+        SELECT
+        *
+        FROM CrewBoard
+    </select>
+
+    <select id="findMyCrewBoard" resultType="mountain.Mountain.model.CrewboardModel">
+        SELECT
+        *
+        FROM CrewBoard
+        WHERE member_id = #{memberId}
+    </select>
+
+</mapper>
