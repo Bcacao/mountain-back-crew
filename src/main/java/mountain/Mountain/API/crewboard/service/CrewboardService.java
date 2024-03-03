@@ -6,6 +6,7 @@ import mountain.Mountain.API.crew.repository.CrewRepository;
 import mountain.Mountain.API.crewboard.dto.request.CreateCrewBoardRequestDto;
 import mountain.Mountain.API.crewboard.dto.request.DeleteCrewBoardRequestDto;
 import mountain.Mountain.API.crewboard.dto.request.UpdateCrewBoardRequestDto;
+import mountain.Mountain.API.crewboard.dto.response.FindAllResponseDto;
 import mountain.Mountain.API.crewboard.repository.CrewBoardRepository;
 import mountain.Mountain.model.CrewboardModel;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class CrewboardService {
     final CrewRepository crewRepository;
 
     // 크루 모집방 생성
-    public boolean makeCrewBoard(CreateCrewBoardRequestDto dto, String memberId){
+    public void makeCrewBoard(CreateCrewBoardRequestDto dto, String memberId){
 
         // dto를 entity로 변환
         CrewboardModel crewboardModel = CrewboardModel.builder()
@@ -31,7 +32,12 @@ public class CrewboardService {
                 .build();
 
         // 쿼리문이 동작하면 true 동작하지 않으면 false
-        return crewBoardRepository.createCrewBoard(crewboardModel);
+        crewBoardRepository.createCrewBoard(crewboardModel);
+
+        // crew table 생성
+        crewRepository.createCrew(crewboardModel.getCrewboardNo());
+
+
     }
 
     // 크루 모집방 수정
@@ -71,7 +77,7 @@ public class CrewboardService {
     }
 
     // 크루 모집방 목록 전체
-    public List<CrewboardModel> findAllCrewBoard(){
+    public List<FindAllResponseDto> findAllCrewBoard(){
 
         // crewboard 전체 list
         return crewBoardRepository.findAllCrewBoard();
@@ -79,7 +85,7 @@ public class CrewboardService {
     }
 
     // 내가 만든 크루 모집방 목록
-    public List<CrewboardModel> findMyCrewBoard(String memberId){
+    public List<FindAllResponseDto> findMyCrewBoard(String memberId){
 
         // crewboard 내가 만든방 list
         return crewBoardRepository.findMyCrewBoard(memberId);

@@ -1,5 +1,6 @@
 package mountain.Mountain.API.crewboard.repository;
 
+import mountain.Mountain.API.crewboard.dto.response.FindAllResponseDto;
 import mountain.Mountain.model.CrewboardModel;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -17,7 +18,7 @@ public interface CrewBoardRepository {
     // CrewBoard방 삭제
     boolean deleteCrewBoard(int crewboardId);
     // CrewBoard방 전체 검색
-    List<CrewboardModel> findAllCrewBoard();
+    List<FindAllResponseDto> findAllCrewBoard();
     // CrewBoard방 내방만 검색
-    List<CrewboardModel> findMyCrewBoard(String memberId);
+    List<FindAllResponseDto> findMyCrewBoard(String memberId);
 }

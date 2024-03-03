@@ -5,7 +5,7 @@
 <mapper namespace="mountain.Mountain.API.crewboard.repository.CrewBoardRepository">
 
 
-     <insert id="createCrewBoard">
+     <insert id="createCrewBoard" useGeneratedKeys="true" keyProperty="crewboardNo">
         INSERT INTO CrewBoard
          (member_id, crewboard_mountain, crewboard_content)
          VALUES
@@ -29,17 +29,57 @@
         DELETE FROM CrewBoard WHERE crewboard_no = #{crewboardNo}
     </delete>
 
-    <select id="findAllCrewBoard" resultType="mountain.Mountain.model.CrewboardModel">
+    <resultMap id="x " type="mountain.Mountain.API.crewboard.dto.response.FindAllResponseDto">
+        <id property="crewboardNo" column="crewboard_no"/>
+        <result property="memberId" column="member_id"/>
+        <result property="crewboardMountain" column="crewboard_mountain"/>
+        <result property="crewboardContent" column="crewboard_content"/>
+        <result property="crewboardTime" column="crewboard_time"/>
+        <collection property="crewModels" ofType="mountain.Mountain.model.CrewModel">
+            <id property="crewNo" column="crew_no"/>
+            <result property="crewMemberId" column="crew_member_id"/>
+            <result property="crewboardNo" column="crewboard_no"/>
+        </collection>
+    </resultMap>
+
+    <select id="findAllCrewboards" resultMap="findAllResultMap">
         SELECT
-        *
-        FROM CrewBoard
+        cb.crewboard_no,
+        cb.member_id,
+        cb.crewboard_mountain,
+        cb.crewboard_content,
+        cb.crewboard_time,
+        cm.crew_no,
+        cm.crew_member_id,
+        cm.crewboard_no AS crewboard_no_fk
+        FROM
+        Crewboard cb
+        LEFT JOIN
+        Crew cm ON cb.crewboard_no = cm.crewboard_no
+        ORDER BY
+        cb.crewboard_time DESC
     </select>
 
-    <select id="findMyCrewBoard" resultType="mountain.Mountain.model.CrewboardModel">
+    <select id="findMyCrewBoard" resultMap="findAllResultMap">
         SELECT
-        *
-        FROM CrewBoard
-        WHERE member_id = #{memberId}
+        cb.crewboard_no,
+        cb.member_id,
+        cb.crewboard_mountain,
+        cb.crewboard_content,
+        cb.crewboard_time,
+        cm.crew_no,
+        cm.crew_member_id,
+        cm.crewboard_no AS crewboard_no_fk
+        FROM
+        Crewboard cb
+        LEFT JOIN
+        Crew cm ON cb.crewboard_no = cm.crewboard_no
+        WHERE cb.member_id = #{memberId}
+        ORDER BY
+        cb.crewboard_time DESC
     </select>
+
+
+
 
 </mapper>
